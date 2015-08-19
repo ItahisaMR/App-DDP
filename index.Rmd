@@ -75,6 +75,14 @@ Propdmg <- StormDataAgg[order(StormDataAgg$PROPDMG, decreasing = T), c("EVTYPE",
                                                                        "PROPDMG")][1:20, ]
 Cropdmg <- StormDataAgg[order(StormDataAgg$CROPDMG, decreasing = T), c("EVTYPE", 
                                                                        "CROPDMG")][1:20, ]
+
+```
+
+---
+
+# Plot
+
+```{r}
 par(mfrow = c(1, 2), oma = c(0, 0, 2, 0))
 par(mar = c(10, 4, 3, 4))
 barplot(Fatalities$FATALITIES, names.arg = Fatalities$EVTYPE, main = "Fatalities", 
@@ -84,9 +92,9 @@ title("Population health damages caused by \nextreme climatic events in United S
       outer = TRUE)
 ```
 
+
 ---
 
 # Thanks for your attention
-
 
 

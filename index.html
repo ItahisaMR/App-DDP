@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
+  <title>Developming Data Product</title>
   <meta charset="utf-8">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="description" content="Developming Data Product">
+  <meta name="author" content="ItahisaMR">
   <meta name="generator" content="slidify" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -32,9 +32,9 @@
     <!-- LOGO SLIDE -->
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
-    <h1></h1>
-    <h2></h2>
-    <p><br/></p>
+    <h1>Developming Data Product</h1>
+    <h2>Course Project</h2>
+    <p>ItahisaMR<br/></p>
   </hgroup>
   <article></article>  
 </slide>
@@ -43,22 +43,120 @@
     <!-- SLIDES -->
     <slide class="" id="slide-1" style="background:;">
   <hgroup>
-    <h2>Read-And-Delete</h2>
+    <h1>Introduction</h1>
   </hgroup>
   <article data-timings="">
-    <ol>
-<li>Edit YAML front matter</li>
-<li>Write using R Markdown</li>
-<li>Use an empty line followed by three dashes to separate slides!</li>
+    <p>The instruction of the homework are: Your Shiny Application</p>
+
+<ol>
+<li>Write a shiny application with associated supporting documentation. The documentation should be thought of as whatever a user will need to get started using your application.</li>
+<li>Deploy the application on Rstudio&#39;s shiny server</li>
+<li>Share the application link by pasting it into the text box below</li>
+<li>Share your server.R and ui.R code on github</li>
 </ol>
+
+<p>The application must include the following:</p>
+
+<ol>
+<li>Some form of input (widget: textbox, radio button, checkbox, ...)</li>
+<li>Some operation on the ui input in sever.R</li>
+<li>Some reactive output displayed as a result of server calculations</li>
+<li>You must also include enough documentation so that a novice user could use your application.</li>
+<li>The documentation should be at the Shiny website itself. Do not post to an external link.</li>
+</ol>
+
+<p>The data ser tha i choose is from Storm Data base, that we used in another coursera course. </p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="class" id="id" style="background:;">
+<slide class="" id="slide-2" style="background:;">
   <hgroup>
-    <h2>Slide 2</h2>
+    <h2>Used code</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">library(plyr)
+library(knitr)
+library(ggplot2)
+library(grid)
+library(car)
+
+StormData &lt;- read.csv(&quot;C:/Users/Itahisa/Documents/repdata-data-StormData.csv&quot;, stringsAsFactors = FALSE, strip.white=TRUE, header=TRUE)                                        
+
+StormData &lt;- StormData[ , c(&quot;EVTYPE&quot;, &quot;BGN_DATE&quot;, &quot;FATALITIES&quot;, &quot;INJURIES&quot;, &quot;PROPDMG&quot;, &quot;PROPDMGEXP&quot;, &quot;CROPDMG&quot;, &quot;CROPDMGEXP&quot;)]
+str(StormData)  
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    902297 obs. of  8 variables:
+##  $ EVTYPE    : chr  &quot;TORNADO&quot; &quot;TORNADO&quot; &quot;TORNADO&quot; &quot;TORNADO&quot; ...
+##  $ BGN_DATE  : chr  &quot;4/18/1950 0:00:00&quot; &quot;4/18/1950 0:00:00&quot; &quot;2/20/1951 0:00:00&quot; &quot;6/8/1951 0:00:00&quot; ...
+##  $ FATALITIES: num  0 0 0 0 0 0 0 0 1 0 ...
+##  $ INJURIES  : num  15 0 2 2 2 6 1 0 14 0 ...
+##  $ PROPDMG   : num  25 2.5 25 2.5 2.5 2.5 2.5 2.5 25 25 ...
+##  $ PROPDMGEXP: chr  &quot;K&quot; &quot;K&quot; &quot;K&quot; &quot;K&quot; ...
+##  $ CROPDMG   : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ CROPDMGEXP: chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+</code></pre>
+
+<pre><code class="r">StormData$BGN_DATE &lt;- as.POSIXct(StormData$BGN_DATE,format=&quot;%m/%d/%Y %H:%M:%S&quot;)
+
+StormData$PROPDMGEXP &lt;- factor(tolower(StormData$PROPDMGEXP))
+StormData$CROPDMGEXP &lt;- factor(tolower(StormData$CROPDMGEXP))
+
+require(car)
+require(plyr)
+
+StormData$PROPDMGEXP &lt;- as.numeric(recode(as.character(StormData$PROPDMGEXP), 
+                                          &quot;&#39;0&#39;=1;&#39;1&#39;=10;&#39;2&#39;=10^2;&#39;3&#39;=10^3;&#39;4&#39;=10^4;&#39;5&#39;=10^5;&#39;6&#39;=10^6;&#39;7&#39;=10^7;&#39;8&#39;=10^8;&#39;b&#39;=10^9;&#39;h&#39;=10^2;&#39;k&#39;=10^3;&#39;m&#39;=10^6;&#39;-&#39;=0;&#39;?&#39;=0;&#39;+&#39;=0&quot;))
+
+StormData$CROPDMGEXP &lt;- as.numeric(recode(as.character(StormData$CROPDMGEXP), 
+                                          &quot;&#39;0&#39;=1;&#39;1&#39;=10;&#39;2&#39;=10^2;&#39;3&#39;=10^3;&#39;4&#39;=10^4;&#39;5&#39;=10^5;&#39;6&#39;=10^6;&#39;7&#39;=10^7;&#39;8&#39;=10^8;&#39;b&#39;=10^9;&#39;h&#39;=10^2;&#39;k&#39;=10^3;&#39;m&#39;=10^6;&#39;-&#39;=0;&#39;?&#39;=0;&#39;+&#39;=0&quot;))
+
+StormData$PROPDMGDOLLAR &lt;- StormData$PROPDMG * StormData$PROPDMGEXP
+
+StormData$CROPDMGDOLLAR &lt;- StormData$CROPDMG * StormData$CROPDMGEXP
+
+StormDataAgg &lt;- ddply(StormData, ~EVTYPE, summarise, FATALITIES = sum(FATALITIES), 
+                      INJURIES = sum(INJURIES), PROPDMG = sum(PROPDMGDOLLAR), CROPDMG = sum(CROPDMGDOLLAR))
+
+Fatalities &lt;- StormDataAgg[order(StormDataAgg$FATALITIES, decreasing = T), c(&quot;EVTYPE&quot;, 
+                                                                             &quot;FATALITIES&quot;)][1:20, ]
+Injuries &lt;- StormDataAgg[order(StormDataAgg$INJURIES, decreasing = T), c(&quot;EVTYPE&quot;, 
+                                                                         &quot;INJURIES&quot;)][1:20, ]
+Propdmg &lt;- StormDataAgg[order(StormDataAgg$PROPDMG, decreasing = T), c(&quot;EVTYPE&quot;, 
+                                                                       &quot;PROPDMG&quot;)][1:20, ]
+Cropdmg &lt;- StormDataAgg[order(StormDataAgg$CROPDMG, decreasing = T), c(&quot;EVTYPE&quot;, 
+                                                                       &quot;CROPDMG&quot;)][1:20, ]
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h1>Plot</h1>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">par(mfrow = c(1, 2), oma = c(0, 0, 2, 0))
+par(mar = c(10, 4, 3, 4))
+barplot(Fatalities$FATALITIES, names.arg = Fatalities$EVTYPE, main = &quot;Fatalities&quot;, 
+        ylab = &quot;fatalities&quot;, cex.axis = 0.8, cex.names = 0.7, las = 2)
+
+title(&quot;Population health damages caused by \nextreme climatic events in United States&quot;, 
+      outer = TRUE)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h1>Thanks for your attention</h1>
   </hgroup>
   <article data-timings="">
     
@@ -72,14 +170,26 @@
     <ul>
       <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=1 title='Read-And-Delete'>
+        data-slide=1 title='Introduction'>
          1
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='Slide 2'>
+        data-slide=2 title='Used code'>
          2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Plot'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Thanks for your attention'>
+         4
       </a>
     </li>
   </ul>
